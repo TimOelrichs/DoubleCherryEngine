@@ -1,4 +1,4 @@
-#include <DoubleCherryEngine/PostProcessing/Video/IVideoPostProcessor.h>
+﻿#include <DoubleCherryEngine/PostProcessing/Video/IVideoPostProcessor.h>
 #include <DoubleCherryEngine/CoreOptionsManager/ICoreOptionsManager.hpp>
 
 enum LcdInterlacingEffectType {
@@ -24,7 +24,7 @@ public:
     };
 
 private:
-    ICoreOptionsManager& optionsManager_ = ICoreOptionsManager::getInstance();
+    CoreOptionsManager& optionsManager_ = CoreOptionsManager::getInstance();
     int isOddFrame = 0;
     float brightnessFactor = 1.05f;
     LcdInterlacingEffectType lcdInterlacingEffectType = LCD_INTERLACING_EFFECT_FAST;

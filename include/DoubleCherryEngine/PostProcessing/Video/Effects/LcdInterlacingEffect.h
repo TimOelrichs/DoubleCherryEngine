@@ -1,4 +1,4 @@
-#include <DoubleCherryEngine/PostProcessing/Video/IVideoPostProcessor.h>
+﻿#include <DoubleCherryEngine/PostProcessing/Video/IVideoPostProcessor.h>
 #include <DoubleCherryEngine/CoreOptionsManager/ICoreOptionsManager.hpp>
 #include <DoubleCherryEngine/Util/PixelUtil.h>
 
@@ -22,7 +22,7 @@ public:
     }
 
 private:
-    ICoreOptionsManager& optionsManager_ = ICoreOptionsManager::getInstance();
+    CoreOptionsManager& optionsManager_ = CoreOptionsManager::getInstance();
     int is_odd_frame = 0;
     float brightenFactor = 1.05f; // default 5%
     LcdInterlacingEffectType lcdInterlacingEffectType = LCD_INTERLACING_EFFECT_FAST;

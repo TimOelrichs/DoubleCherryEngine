@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include <libretro.h>
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
 #include <DoubleCherryEngine/Renderer/VideoRenderer/VideoLayoutManager.hpp>
-#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoFrameBufferManager.h>
+#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoFrameBufferManager.hpp>
 #include <string>
 
 class VideoRender final : public ISingleton<VideoRender>{

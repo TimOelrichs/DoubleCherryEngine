@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <DoubleCherryEngine/common/types/types.hpp>
 #include <DoubleCherryEngine/CoreManager/ICore.hpp>
@@ -6,7 +6,7 @@
 #include <DoubleCherryEngine/CoreConfigurator/CoreConfigurator.hpp>
 
 
-class CoreManager final : public ISingleton<CoreManager>, public ICore {
+class CoreManager final : public ISingleton<CoreManager> {
     friend class ISingleton<CoreManager>;
 
 public:
@@ -15,33 +15,29 @@ public:
         core_ = core;
     }
   
-    void init() override {
-        // Optionally prepare things before the core is selected
-    }
-
-    void deinit() override {
+    void deinit()  {
         unloadGame();
     }
 
-    bool loadGame(const struct retro_game_info* info) override {
+    bool loadGame(const struct retro_game_info* info)  {
         core_ = CoreConfigurator::getInstance().getCore(info);
         CoreEventManager::getInstance().onLoadGame();
     }
 
-    bool loadGameSpecial() override {
+    bool loadGameSpecial()  {
         return false;
     }
 
-    void unloadGame() override {
+    void unloadGame()  {
         core_ = nullptr;
     }
 
-    void reset() override {
+    void reset()  {
         if (core_) core_->reset();
         CoreEventManager::getInstance().onReset();
     }
 
-    void run() override {
+    void run()  {
         CoreEventManager::getInstance().onBeforeRun();
         if (core_) core_->run();
         CoreEventManager::getInstance().onAfterRun();

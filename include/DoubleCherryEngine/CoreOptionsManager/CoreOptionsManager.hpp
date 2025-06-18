@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
@@ -11,10 +11,16 @@ typedef struct {
     int value;
 } OptionEntry;
 
-class ICoreOptionsManager : public ISingleton<ICoreOptionsManager>, public IEventListener {
-    friend class ISingleton<ICoreOptionsManager>;
+class CoreOptionsManager : public ISingleton<CoreOptionsManager>, public IEventListener {
+    friend class ISingleton<CoreOptionsManager>;
  
 public:
+
+    void init() {
+        eventManager.registerOnBeforeRun(this);
+        eventManager.registerOnOptionsUpdate(this);
+    }
+
     void addOptionDefinitions(retro_core_option_v2_definition* def) {
 
     }
@@ -79,9 +85,8 @@ public:
 private:
     CoreEventManager& eventManager = CoreEventManager::getInstance();
 
-    ICoreOptionsManager() {
-        eventManager.registerOnBeforeRun(this);
-        eventManager.registerOnOptionsUpdate(this);
+    CoreOptionsManager() {
+     
     }
 
 

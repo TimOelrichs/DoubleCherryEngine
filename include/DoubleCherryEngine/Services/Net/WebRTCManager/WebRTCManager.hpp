@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <rtc/rtc.hpp>
 #include <string>
 #include <memory>
@@ -7,9 +7,9 @@
 
 class WebRTCManager {
 public:
-    static WebRTCManager& get(); // Singleton-Zugriff
+    static WebRTCManager& get(); 
 
-    void init(); // explizit aufrufbar
+    void init(); 
     void setRemoteDescription(const std::string& sdp, const std::string& type);
     void addIceCandidate(const std::string& candidate, const std::string& mid);
     void sendCameraFrame(const uint8_t* rgbData, int width, int height);
@@ -18,7 +18,7 @@ public:
     void onLocalCandidate(std::function<void(std::string, std::string)> cb);
 
 private:
-    WebRTCManager(); // privat
+    WebRTCManager(); 
     WebRTCManager(const WebRTCManager&) = delete;
     WebRTCManager& operator=(const WebRTCManager&) = delete;
 

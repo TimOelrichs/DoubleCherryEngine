@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <libretro.h>
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
@@ -15,6 +15,11 @@ public:
     retro_input_state_t getInputState() {
         return input_state_cb;
     }
+
+    void init() {
+        auto& events = CoreEventManager::getInstance();
+        events.registerOnOptionsUpdate(this);
+    };
 
     const std::array<float, 3>& getGyroscope() {
 
@@ -50,13 +55,12 @@ private:
             sensorInterface_ = nullptr; 
         }
 
-        auto& events = CoreEventManager::getInstance();
-        events.registerOnOptionsUpdate(this);
+      
     }
 
 protected:
     void onOptionsUpdate() override {
-        auto& options = ICoreOptionsManager::getInstance();
+        auto& options = CoreOptionsManager::getInstance();
 
     }
 
