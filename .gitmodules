@@ -1,0 +1,10 @@
+[submodule "external/libdatachannel"]
+	path = external/libdatachannel
+	url = https://github.com/paullouisageneau/libdatachannel
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json
+[submodule "external/cpp-httplib"]
+	path = external/cpp-httplib
+	url = https://github.com/yhirose/cpp-httplib.git
+

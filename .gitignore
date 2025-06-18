@@ -1,0 +1,9 @@
+﻿*.o
+*.so
+*.dll
+*.exe
+.out/
+.github/
+.vs/
+
+
