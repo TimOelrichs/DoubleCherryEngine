@@ -2,7 +2,7 @@
 *.so
 *.dll
 *.exe
-.out/
+out/
 .github/
 .vs/
 
