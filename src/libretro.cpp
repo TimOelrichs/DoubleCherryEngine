@@ -1,9 +1,4 @@
-#include <DoubleCherryEngine/DoubleCherryEngine.h>
-
-
-CoreConfigurator& coreConfigurator = CoreConfigurator::getInstance();
-CoreManager& coreManager = CoreManager::getInstance();
-VideoLayoutManager& videoLayoutManager = VideoLayoutManager::getInstance();
+﻿#include <DoubleCherryEngine/DoubleCherryEngine.hpp>
 
 
 void retro_get_system_av_info(struct retro_system_av_info* info)
@@ -11,9 +6,7 @@ void retro_get_system_av_info(struct retro_system_av_info* info)
     //videoLayoutManager.getAvInfo(info);
 }
 
-void retro_init(void) {
-    coreConfigurator.init();
-}
+void retro_init(void) {}
 
 void retro_deinit(void)
 {
@@ -22,9 +15,7 @@ void retro_deinit(void)
 
 bool retro_load_game(const struct retro_game_info* info)
 {
-    if (!info) return false;
-    coreManager.setCore(coreConfigurator.getCore(info));
-    return coreManager.loadGame(info);
+	DoubleCherryEngine::loadGame(info);
 }
 
 bool retro_load_game_special(unsigned type, const struct retro_game_info* info, size_t num_info)
@@ -34,17 +25,17 @@ bool retro_load_game_special(unsigned type, const struct retro_game_info* info, 
 
 void retro_unload_game(void)
 {
-    coreManager.unloadGame();
+    DoubleCherryEngine::unloadGame();
 }
 
 void retro_reset(void)
 {
-    coreManager.reset();
+    DoubleCherryEngine::reset();
 }
 
 void retro_run(void)
 {
-    coreManager.run();
+	DoubleCherryEngine::run();
 }
 
 void retro_get_system_info(struct retro_system_info* info)

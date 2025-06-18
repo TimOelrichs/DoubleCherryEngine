@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <libretro.h>
 #include "inputDescriptors/inputDescriptors.h"
 
@@ -9,7 +9,7 @@ static retro_netpacket_send_t netpacket_send_fn_ptr = NULL;
 static retro_netpacket_poll_receive_t netpacket_pollrcv_fn_ptr = NULL;
 
 
-
+retro_environment_t environ_cb;
 retro_set_rumble_state_t rumble_state_cb;
 retro_set_led_state_t led_state_cb;
 retro_log_printf_t log_cb;

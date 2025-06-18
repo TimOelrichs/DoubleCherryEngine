@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include <libretro.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
 #include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
-#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoFrameBufferManager.h>
+#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoFrameBufferManager.hpp>
 
 
 struct SystemScreenInfo {
