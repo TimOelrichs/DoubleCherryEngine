@@ -1,10 +1,10 @@
-#pragma once
-#include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
+﻿#pragma once
+#include <DoubleCherryEngine/EngineEventManager/EngineEventManager.hpp>
 
 ;
 class IEventListener {
 protected:
-    virtual bool onLoadGame() {};
+    virtual bool onLoadGame() { return true; };
     virtual void onReset() {};
     virtual void onBeforeRun() {};
     virtual void onAfterRun() {};
@@ -15,7 +15,7 @@ protected:
     virtual void onUnserialize() {};
     virtual ~IEventListener() = default;
 
-    friend class CoreEventManager;
+    friend class EngineEventManager;
 };
 
 

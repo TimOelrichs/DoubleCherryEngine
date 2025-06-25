@@ -1,12 +1,12 @@
-#pragma once
+﻿#pragma once
 
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
-#include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
+#include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
 #include <vector>
 #include <algorithm>
 
-class CoreEventManager : public ISingleton<CoreEventManager> {
-    friend class ISingleton<CoreEventManager>;
+class EngineEventManager : public ISingleton<EngineEventManager> {
+    friend class ISingleton<EngineEventManager>;
 
 public:
     // Notify all listeners to 

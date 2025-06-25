@@ -5,10 +5,10 @@
 
 // Core engine components
 #include <DoubleCherryEngine/CoreConfigurator/CoreConfigurator.hpp>
-#include <DoubleCherryEngine/CoreManager/CoreManager.hpp>
-#include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
+#include <DoubleCherryEngine/EngineCoreManager/EngineCoreManager.hpp>
+#include <DoubleCherryEngine/EngineEventManager/EngineEventManager.hpp>
+#include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
 #include <DoubleCherryEngine/EnviromentManager/EnviromentManager.hpp>
-#include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
 #include <DoubleCherryEngine/CoreOptionsManager/CoreOptionsManager.hpp>
 #include <DoubleCherryEngine/InputManager/InputManager.hpp>
 #include <DoubleCherryEngine/Renderer/AudioRenderer/AudioRenderer.hpp>
@@ -20,7 +20,7 @@
 
 
 CoreConfigurator& coreConfigurator = CoreConfigurator::getInstance();
-CoreManager& coreManager = CoreManager::getInstance();
+EngineCoreManager& coreManager = EngineCoreManager::getInstance();
 VideoLayoutManager& videoLayoutManager = VideoLayoutManager::getInstance();
 InputManager& inputManager = InputManager::getInstance();
 EnvironmentManager& environmentManager = EnvironmentManager::getInstance();

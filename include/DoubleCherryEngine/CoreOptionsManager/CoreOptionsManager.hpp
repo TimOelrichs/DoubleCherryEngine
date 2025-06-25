@@ -2,8 +2,8 @@
 
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
-#include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
-#include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
+#include <DoubleCherryEngine/EngineCoreManager/EngineCoreManager.hpp>
+#include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
 #include <DoubleCherryEngine/Util/StringUtil.h>
 
 typedef struct {
@@ -83,7 +83,7 @@ public:
 
 
 private:
-    CoreEventManager& eventManager = CoreEventManager::getInstance();
+    EngineEventManager& eventManager = EngineEventManager::getInstance();
 
     CoreOptionsManager() {
      

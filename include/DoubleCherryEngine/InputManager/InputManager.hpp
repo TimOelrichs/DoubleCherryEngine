@@ -4,7 +4,7 @@
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <DoubleCherryEngine/common/types/types.hpp>
-#include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
+#include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
 #include <array>
 
 
@@ -17,7 +17,7 @@ public:
     }
 
     void init() {
-        auto& events = CoreEventManager::getInstance();
+        auto& events = EngineEventManager::getInstance();
         events.registerOnOptionsUpdate(this);
     };
 

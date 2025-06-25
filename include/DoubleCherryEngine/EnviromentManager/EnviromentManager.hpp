@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <libretro.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
-#include <DoubleCherryEngine/CoreManager/ICore.hpp>
+#include <DoubleCherryEngine/EngineCoreManager/ICore.hpp>
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 
 
