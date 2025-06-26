@@ -8,8 +8,8 @@
 #include <DoubleCherryEngine/Renderer/VideoRenderer/VideoLayoutManager.hpp>
 #include <string>
 
-class VideoRender final : public ISingleton<VideoRender>{
-    friend class ISingleton<VideoRender>;
+class VideoRenderer final : public ISingleton<VideoRenderer>{
+    friend class ISingleton<VideoRenderer>;
 
 public:
 
