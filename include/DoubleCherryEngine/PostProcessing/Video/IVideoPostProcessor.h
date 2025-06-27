@@ -1,9 +1,9 @@
-#include <libretro.h>
+﻿#include <libretro.h>
 #include <DoubleCherryEngine/libretro/libretroVariables.h>
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
-#include <DoubleCherryEngine/CoreEventManager/CoreEventManager.hpp>
-#include <DoubleCherryEngine/CoreEventManager/IEventListener.hpp>
-#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoFrameBufferManager.h>
+#include <DoubleCherryEngine/EngineEventManager/EngineEventManager.hpp>
+#include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
+
 
 
 
@@ -17,20 +17,14 @@ public:
 
 protected:
 
-    VideoFramebufferManager& videoFramebufferManager = VideoFramebufferManager::getInstance();
-    uint8_t* currentFrameBuffer_ = nullptr;
-    FramebufferInfo* currentFramebufferInfo_;
-
     IVideoPostProcessor() {
-        CoreEventManager::getInstance().registerOnBeforeVideoRender(this);
+        EngineEventManager::getInstance().registerOnBeforeVideoRender(this);
     }
 
     void onBeforeVideoRender() override {
-        currentFramebufferInfo_ = videoFramebufferManager.getCurrentFramebufferInfo();
-        currentFrameBuffer_ = videoFramebufferManager.getCurrentFrameBuffer();
-        doPostProsssing();
-        videoFramebufferManager.setCurrentFrameBuffer(currentFrameBuffer_);
-        videoFramebufferManager.setCurrentFramebufferInfo(currentFramebufferInfo_);
+		//TODO: GET FRAME BUFFER FROM VIDEO POST PROCESSOR
+        applyPostProcessing();
+         //TODO: SEND FRAME BUFFER
     }
 
 };

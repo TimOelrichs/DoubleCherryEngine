@@ -8,39 +8,58 @@
 #include <DoubleCherryEngine/EngineEventManager/EngineEventManager.hpp>
 #include <DoubleCherryEngine/EngineEventManager/IEventListener.hpp>
 
-
-
-
-enum class LayoutType {
+enum class gridColumns {
     Horizontal,
     Vertical,
     Grid
 };
 
-class VideoLayoutManager final : public ISingleton<VideoLayoutManager>, public IEventListener {
-    friend class ISingleton<VideoLayoutManager>;
+
+struct AVSettings {
+    float fps;
+    unsigned sample_rate;
+};
+
+inline AVSettings getAVSettingsForSystem(SystemType sys) {
+    switch (sys) {
+    case SystemType::GB:  return { 59.73f, 44100 };
+    case SystemType::GBA: return { 59.73f, 32768 };
+    case SystemType::NDS: return { 59.73f, 32768 };
+    default:             return { 60.0f, 44100 };
+    }
+}
+
+class AVInfoManager final : public ISingleton<AVInfoManager>, public IEventListener {
+    friend class ISingleton<AVInfoManager>;
 
 public:
 
     void getAVInfo(struct retro_system_av_info* info) {
         if (!info) return;
-        info->geometry = getGeometry();
-        info->timing.fps = coreManager.getSystemsFPS();
-        info->timing.sample_rate = coreManager.getSystemsSampleRate();
         currentAVInfo = info;
+
+        info->geometry = getGeometry();
+
+        SystemType sysType = coreManager.getSystemType(); 
+        AVSettings settings = getAVSettingsForSystem(sysType);
+
+        info->timing.fps = settings.fps;
+        info->timing.sample_rate = settings.sample_rate;
+
+      
     }
 
-    LayoutType getCurrentLayoutType() const {
+    gridColumns getCurrentLayoutType() const {
         return currentLayoutType;
     }
 
-    std::tuple<int, int> calculateGrid(int total, LayoutType layout) {
+    std::tuple<int, int> calculateGrid(int total, gridColumns layout) {
         switch (layout) {
-        case LayoutType::Horizontal:
+        case gridColumns::Horizontal:
             return { total, 1 }; // cols = total, rows = 1
-        case LayoutType::Vertical:
+        case gridColumns::Vertical:
             return { 1, total }; // cols = 1, rows = total
-        case LayoutType::Grid:
+        case gridColumns::Grid:
         default:
             int cols = static_cast<int>(std::ceil(std::sqrt(total)));
             int rows = static_cast<int>(std::ceil(static_cast<float>(total) / cols));
@@ -48,17 +67,15 @@ public:
         }
     }
 
-
-
 private:
 
     EngineCoreManager& coreManager = EngineCoreManager::getInstance();
-    LayoutType currentLayoutType = LayoutType::Grid;
-    int maxSystemsCount = 0;
-    int currentActiveSystem = 0;
+    gridColumns currentLayoutType = gridColumns::Grid;
+    int maxSystemsCount = 1;
+    int currentActiveSystem = 1;
     struct retro_system_av_info* currentAVInfo = nullptr;
-    ScreenSize currentScreenSize;
-   
+    ScreenSize currentScreenSize = ScreenSize::GB(); // Default
+	SystemType currentSystemType = SystemType::GB; // Default
 
     retro_game_geometry getGeometry() {
         retro_game_geometry geometry;
@@ -82,14 +99,13 @@ private:
         environ_cb(RETRO_ENVIRONMENT_SET_GEOMETRY, currentAVInfo);
     }
 
-
-
 protected:
 
     bool onLoadGame() override {
         maxSystemsCount = coreManager.getMaxSystemsCount();
         currentActiveSystem = coreManager.getActiveSystemsCount();
         currentScreenSize = coreManager.getSingleScreenSize();
+        updateGeometry();
         return true;
     }
 

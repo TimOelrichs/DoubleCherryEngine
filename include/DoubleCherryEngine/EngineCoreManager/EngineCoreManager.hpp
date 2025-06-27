@@ -6,6 +6,7 @@
 #include <DoubleCherryEngine/CoreConfigurator/CoreConfigurator.hpp>
 
 
+
 class EngineCoreManager final : public ISingleton<EngineCoreManager> {
     friend class ISingleton<EngineCoreManager>;
 
@@ -13,6 +14,10 @@ public:
 
     void setCore(IMultiCore* core) {
         core_ = core;
+    }
+
+    SystemType getSystemType() {
+        return core_->getSystemType();
     }
 
     void deinit()  {
@@ -54,20 +59,7 @@ public:
         return 0;
     }
 
-    ScreenSize getSingleScreenSize() const {
-        if (core_) return core_->getSingleScreenSize();
-        return { 0, 0 };
-    };
 
-    int getSystemsFPS() const {
-        if (core_) return core_->getSystemsFPS();
-        return 0;
-    };
-
-    int getSystemsSampleRate() const {
-        if (core_) return core_->getSystemsSampleRate();
-        return 0;
-    };
 
 private:
 	EngineEventManager& eventManager_ = EngineEventManager::getInstance();

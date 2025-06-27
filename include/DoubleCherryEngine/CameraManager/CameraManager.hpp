@@ -1,96 +1,83 @@
-#pragma once
+﻿#pragma once
 
 #include <libretro.h>
-#include <DoubleCherryEngine/libretro/libretroVariables.h>
+#include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <cstring>
+#include <algorithm>
 
-class CameraManager {
+class CameraManager final : public ISingleton<CameraManager> {
+    friend class ISingleton<CameraManager>;
+
 public:
-    static CameraManager& getInstance() {
-        static CameraManager instance;
-        return instance;
-    }
+    void initialize(retro_environment_t env_cb) {
+        environmentCallback_ = env_cb;
 
-    void initialize(retro_environment_t retroEnv) {
-        environmentCallback_ = retroEnv;
-
-        if (!cameraSupported()) return;
-
-        retro_camera_callback cb = {};
+        retro_camera_callback cb{};
+        cb.caps = (1ULL << RETRO_CAMERA_BUFFER_RAW_FRAMEBUFFER);
+        cb.width = 640;
+        cb.height = 480;
         cb.start = &CameraManager::cameraStartStatic;
         cb.stop = &CameraManager::cameraStopStatic;
         cb.frame_raw_framebuffer = &CameraManager::cameraFrameStatic;
-        cb.userdata = this;
+        cb.frame_opengl_texture = nullptr;
+        cb.initialized = nullptr;
+        cb.deinitialized = nullptr;
 
-        environmentCallback_(RETRO_ENVIRONMENT_SET_CAMERA_CALLBACK, &cb);
+        // Nur registrieren, wenn das Interface verfügbar ist
+        retro_camera_callback* dummy = nullptr;
+        if (env_cb && env_cb(RETRO_ENVIRONMENT_GET_CAMERA_INTERFACE, &dummy)) {
+            env_cb(RETRO_ENVIRONMENT_SET_CAMERA_CALLBACK, &cb);
+        }
     }
 
-    bool cameraSupported() const {
-        bool supported = false;
-        if (environmentCallback_)
-            environmentCallback_(RETRO_ENVIRONMENT_GET_CAMERA_INTERFACE_SUPPORT, &supported);
-        return supported;
-    }
-
-    const uint8_t* getLastFrame() const {
-        return lastFrame_;
-    }
-
-    uint32_t getFrameWidth() const {
-        return frameWidth_;
-    }
-
-    uint32_t getFrameHeight() const {
-        return frameHeight_;
-    }
-
-    bool isFrameAvailable() const {
-        return frameAvailable_;
-    }
-
-    void consumeFrame() {
-        frameAvailable_ = false;
-    }
+    const uint8_t* getLastFrame() const { return lastFrame_; }
+    uint32_t getFrameWidth() const { return frameWidth_; }
+    uint32_t getFrameHeight() const { return frameHeight_; }
+    bool isFrameAvailable() const { return frameAvailable_; }
+    void consumeFrame() { frameAvailable_ = false; }
 
 private:
-    retro_environment_t environmentCallback_ = nullptr;
-
-    static constexpr uint32_t MAX_FRAME_SIZE = 640 * 480 * 2;
-    uint8_t lastFrame_[MAX_FRAME_SIZE] = {};
-    uint32_t frameWidth_ = 0;
-    uint32_t frameHeight_ = 0;
-    bool frameAvailable_ = false;
-
     CameraManager() = default;
     ~CameraManager() = default;
     CameraManager(const CameraManager&) = delete;
     CameraManager& operator=(const CameraManager&) = delete;
 
-    static bool cameraStartStatic(void* userdata, uint32_t width, uint32_t height) {
-        auto* self = static_cast<CameraManager*>(userdata);
-        self->frameWidth_ = width;
-        self->frameHeight_ = height;
+    static bool cameraStartStatic(unsigned width, unsigned height) {
+        auto& self = getInstance();
+        self.frameWidth_ = width;
+        self.frameHeight_ = height;
+        self.frameAvailable_ = false;
         return true;
     }
 
-    static void cameraStopStatic(void* userdata) {
-        auto* self = static_cast<CameraManager*>(userdata);
-        self->frameWidth_ = 0;
-        self->frameHeight_ = 0;
+    static void cameraStopStatic() {
+        auto& self = getInstance();
+        self.frameWidth_ = 0;
+        self.frameHeight_ = 0;
+        self.frameAvailable_ = false;
     }
 
-    static void cameraFrameStatic(void* userdata, const uint8_t* data, uint32_t width, uint32_t height, size_t pitch) {
-        auto* self = static_cast<CameraManager*>(userdata);
+    static void cameraFrameStatic(const uint8_t* data, unsigned width, unsigned height, size_t pitch) {
+        auto& self = getInstance();
 
-        const size_t copyWidth = std::min<size_t>(width * 2, sizeof(self->lastFrame_) / height);
-        const size_t maxHeight = std::min<size_t>(height, sizeof(self->lastFrame_) / copyWidth);
+        constexpr size_t MAX_FRAME_SIZE = sizeof(self.lastFrame_);
+        const size_t bytesPerPixel = 2;
+        const size_t copyWidth = std::min(width * bytesPerPixel, pitch);
+        const size_t maxHeight = std::min(height, MAX_FRAME_SIZE / copyWidth);
 
         for (size_t y = 0; y < maxHeight; ++y) {
-            memcpy(&self->lastFrame_[y * copyWidth], &data[y * pitch], copyWidth);
+            std::memcpy(&self.lastFrame_[y * copyWidth], &data[y * pitch], copyWidth);
         }
 
-        self->frameAvailable_ = true;
-        self->frameWidth_ = width;
-        self->frameHeight_ = height;
+        self.frameWidth_ = width;
+        self.frameHeight_ = height;
+        self.frameAvailable_ = true;
     }
+
+    retro_environment_t environmentCallback_ = nullptr;
+    static constexpr size_t MAX_FRAME_SIZE = 640 * 480 * 2;
+    uint8_t lastFrame_[MAX_FRAME_SIZE]{};
+    uint32_t frameWidth_ = 0;
+    uint32_t frameHeight_ = 0;
+    bool frameAvailable_ = false;
 };

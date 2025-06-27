@@ -18,16 +18,21 @@
 
 // Utility components
 
-
+EngineEventManager& eventManager = EngineEventManager::getInstance();
 CoreConfigurator& coreConfigurator = CoreConfigurator::getInstance();
 EngineCoreManager& coreManager = EngineCoreManager::getInstance();
-VideoLayoutManager& videoLayoutManager = VideoLayoutManager::getInstance();
+AVInfoManager& videoLayoutManager = AVInfoManager::getInstance();
 InputManager& inputManager = InputManager::getInstance();
 EnvironmentManager& environmentManager = EnvironmentManager::getInstance();
 
 
 class DoubleCherryEngine {
 public:
+
+	static void init() {
+
+	
+	};
 
 	static bool loadGame(const struct retro_game_info* info) {
 		if (!info) return false;
@@ -44,5 +49,7 @@ public:
 	static void run() {
 		coreManager.run();
 	}
+
+
 
 };

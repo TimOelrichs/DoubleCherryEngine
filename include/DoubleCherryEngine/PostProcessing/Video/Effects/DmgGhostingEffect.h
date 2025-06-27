@@ -1,5 +1,5 @@
 ﻿#include <DoubleCherryEngine/PostProcessing/Video/IVideoPostProcessor.h>
-#include <DoubleCherryEngine/CoreOptionsManager/ICoreOptionsManager.hpp>
+#include <DoubleCherryEngine/CoreOptionsManager/CoreOptionsManager.hpp>
 
 enum LcdInterlacingEffectType {
     LCD_INTERLACING_EFFECT_OFF = 0,

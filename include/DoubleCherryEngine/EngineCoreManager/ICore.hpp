@@ -2,6 +2,8 @@
 #include <DoubleCherryEngine/common/types/types.hpp>
 #include <string.h>
 
+
+
 struct ScreenSize {
     int width;
     int height;
@@ -35,14 +37,13 @@ class IMultiCore {
 public:
     virtual ~IMultiCore() = default;
 
-    ScreenSize getSingleScreenSize() const {
-        return screenSize;
-    };
 
+    SystemType getSystemType() const {
+        return systemType;
+	}
     virtual int getMaxSystemsCount() = 0;
     virtual int getActiveSystemsCount() = 0;
-    virtual int getSystemsFPS() = 0;
-	virtual int getSystemsSampleRate() = 0;
+
 
     // Initialize the core
     virtual void init() = 0;
@@ -68,5 +69,5 @@ public:
     //SystemType systemType;
     //std::String gameTitle;
 private:
-    ScreenSize screenSize;
+	SystemType systemType = SystemType::GB; // Default to GB
 };

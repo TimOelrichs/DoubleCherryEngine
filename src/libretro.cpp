@@ -3,10 +3,12 @@
 
 void retro_get_system_av_info(struct retro_system_av_info* info)
 {
-    //videoLayoutManager.getAvInfo(info);
+     videoLayoutManager.getAVInfo(info);
 }
 
-void retro_init(void) {}
+void retro_init(void) {
+    DoubleCherryEngine::init();
+}
 
 void retro_deinit(void)
 {
