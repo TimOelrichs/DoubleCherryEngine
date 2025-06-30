@@ -28,7 +28,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Includes
 target_include_directories(${PROJECT_NAME} PRIVATE
   ${CMAKE_SOURCE_DIR}/include
-  ${CMAKE_SOURCE_DIR}/external/libretro-common
+  ${CMAKE_SOURCE_DIR}/external/libretro-common/include
   ${CMAKE_SOURCE_DIR}/external/cpp-httplib
   ${CMAKE_SOURCE_DIR}/external/json/nlohmann/include
 )
