@@ -13,7 +13,7 @@
 #include <DoubleCherryEngine/InputManager/InputManager.hpp>
 #include <DoubleCherryEngine/Renderer/AudioRenderer/AudioRenderer.hpp>
 #include <DoubleCherryEngine/Renderer/VideoRenderer/VideoRenderer.hpp>
-#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoLayoutManager.hpp>
+#include <DoubleCherryEngine/AVInfoManager/AVInfoManager.hpp>
 
 
 // Utility components

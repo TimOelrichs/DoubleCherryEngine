@@ -5,7 +5,7 @@
 #include <DoubleCherryEngine/common/interfaces/ISingleton.hpp>
 #include <DoubleCherryEngine/EngineCoreManager/EngineCoreManager.hpp>
 #include <DoubleCherryEngine/EngineEventManager/EngineEventManager.hpp>
-#include <DoubleCherryEngine/Renderer/VideoRenderer/VideoLayoutManager.hpp>
+#include <DoubleCherryEngine/AVInfoManager/AVInfoManager.hpp>
 #include <string>
 
 class VideoRenderer final : public ISingleton<VideoRenderer>{
@@ -14,14 +14,14 @@ class VideoRenderer final : public ISingleton<VideoRenderer>{
 public:
 
     void init() {
-        ScreenSize singleScreenSize = coreManager.getSingleScreenSize();
+        ScreenSize singleScreenSize = avInfoManager.getCurrentAvSettings().screenSize;
         screenW = singleScreenSize.width;
         screenH = singleScreenSize.height;
         screenPitch = singleScreenSize.getPitch();
         screensToRenderCount = coreManager.getActiveSystemsCount();
-        layoutType = videoLayoutManager.getCurrentLayoutType();
+        layoutType = avInfoManager.getCurrentLayoutType();
 
-        std::tie(gridColums, gridRows) = videoLayoutManager.calculateGrid(screensToRenderCount, layoutType);
+        std::tie(gridColums, gridRows) = avInfoManager.calculateGrid(screensToRenderCount, layoutType);
 
         fullWidth = screenW * gridColums;
         fullHeight = screenH * gridRows;
@@ -81,7 +81,7 @@ public:
 
 private:
 
-    AVInfoManager& videoLayoutManager = AVInfoManager::getInstance();
+    AVInfoManager& avInfoManager = AVInfoManager::getInstance();
     EngineEventManager& eventManager = EngineEventManager::getInstance();
 	EngineCoreManager& coreManager = EngineCoreManager::getInstance();
     int screenW = 0, screenH = 0, screenPitch = 0;

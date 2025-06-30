@@ -18,14 +18,15 @@ enum class gridColumns {
 struct AVSettings {
     float fps;
     unsigned sample_rate;
+	ScreenSize screenSize;
 };
 
 inline AVSettings getAVSettingsForSystem(SystemType sys) {
     switch (sys) {
-    case SystemType::GB:  return { 59.73f, 44100 };
-    case SystemType::GBA: return { 59.73f, 32768 };
-    case SystemType::NDS: return { 59.73f, 32768 };
-    default:             return { 60.0f, 44100 };
+    case SystemType::GB:  return { 59.73f, 44100, ScreenSize::GB()};
+    case SystemType::GBA: return { 59.73f, 32768, ScreenSize::GBA() };
+    case SystemType::NDS: return { 59.73f, 32768, ScreenSize::NDS() };
+    default:             return { 59.73f, 44100, ScreenSize::GB()};
     }
 }
 
@@ -34,20 +35,22 @@ class AVInfoManager final : public ISingleton<AVInfoManager>, public IEventListe
 
 public:
 
-    void getAVInfo(struct retro_system_av_info* info) {
+    void updateAVInfo(struct retro_system_av_info* info) {
         if (!info) return;
         currentAVInfo = info;
 
         info->geometry = getGeometry();
 
-        SystemType sysType = coreManager.getSystemType(); 
-        AVSettings settings = getAVSettingsForSystem(sysType);
+        currentSystemType = coreManager.getSystemType();
+        currentSettings = getAVSettingsForSystem(currentSystemType);
 
-        info->timing.fps = settings.fps;
-        info->timing.sample_rate = settings.sample_rate;
-
-      
+        info->timing.fps = currentSettings.fps;
+        info->timing.sample_rate = currentSettings.sample_rate;
     }
+
+    AVSettings getCurrentAvSettings() const {
+        return currentSettings;
+	}   
 
     gridColumns getCurrentLayoutType() const {
         return currentLayoutType;
@@ -69,13 +72,17 @@ public:
 
 private:
 
+    SystemType currentSystemType = SystemType::GB; // Default system type
+    AVSettings currentSettings = getAVSettingsForSystem(SystemType::GB);
+	
+
     EngineCoreManager& coreManager = EngineCoreManager::getInstance();
     gridColumns currentLayoutType = gridColumns::Grid;
     int maxSystemsCount = 1;
     int currentActiveSystem = 1;
     struct retro_system_av_info* currentAVInfo = nullptr;
     ScreenSize currentScreenSize = ScreenSize::GB(); // Default
-	SystemType currentSystemType = SystemType::GB; // Default
+
 
     retro_game_geometry getGeometry() {
         retro_game_geometry geometry;
@@ -104,7 +111,7 @@ protected:
     bool onLoadGame() override {
         maxSystemsCount = coreManager.getMaxSystemsCount();
         currentActiveSystem = coreManager.getActiveSystemsCount();
-        currentScreenSize = coreManager.getSingleScreenSize();
+        currentScreenSize = getAVSettingsForSystem(currentSystemType).screenSize;
         updateGeometry();
         return true;
     }
